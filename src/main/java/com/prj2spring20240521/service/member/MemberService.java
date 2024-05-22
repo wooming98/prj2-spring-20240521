@@ -17,4 +17,7 @@ public class MemberService {
         mapper.insert(member);
     }
 
+    public Member getByEmail(String email) {
+        return mapper.selectByEmail(email);
+    }
 }
