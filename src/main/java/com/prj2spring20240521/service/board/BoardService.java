@@ -94,9 +94,9 @@ public class BoardService {
     public Board get(Integer id) {
         Board board = mapper.selectById(id);
         List<String> fileNames = mapper.selectFileNameByBoardId(id);
-        // http://http://172.19.176.1:8888/{id}/{name}
+        // http://172.19.176.1:8888/{id}/{name}
         List<String> imageSrcList = fileNames.stream()
-                .map(name -> STR."http://http://172.19.176.1:8888/\{id}/\{name}")
+                .map(name -> STR."http://172.19.176.1:8888/\{id}/\{name}")
                 .toList();
         board.setImageSrcList(imageSrcList);
         return board;
