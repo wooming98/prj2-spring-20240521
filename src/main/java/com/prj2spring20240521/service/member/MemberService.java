@@ -80,7 +80,7 @@ public class MemberService {
 
     public void remove(Integer id) {
         // 회원이 쓴 게시물 조회
-        List<Board> boardList = boardMapper.selectByMemeberId(id);
+        List<Board> boardList = boardMapper.selectByMemberId(id);
 
         // 각 게시물 지우기
         boardList.forEach(board -> boardService.remove(board.getId()));

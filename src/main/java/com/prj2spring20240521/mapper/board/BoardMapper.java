@@ -132,5 +132,5 @@ public interface BoardMapper {
             FROM board
             WHERE member_id=#{memberId}
             """)
-    List<Board> selectByMemeberId(Integer id);
+    List<Board> selectByMemberId(Integer id);
 }
