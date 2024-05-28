@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,14 +27,6 @@ public class BoardController {
             Authentication authentication,
             Board board,
             @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws IOException {
-
-        if (files != null) {
-            System.out.println("filse = " + files.length);
-
-            for (MultipartFile file : files) {
-                System.out.println(file.getOriginalFilename());
-            }
-        }
 
         if (service.validate(board)) {
             service.add(board, files, authentication);
@@ -77,8 +70,11 @@ public class BoardController {
 
     @PutMapping("edit")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity edit(@RequestBody Board board,
+    public ResponseEntity edit(Board board,
+                               @RequestParam(value = "removeFileList[]", required = false)
+                               List<String> removeFileList,
                                Authentication authentication) {
+
         if (!service.hasAccess(board.getId(), authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
