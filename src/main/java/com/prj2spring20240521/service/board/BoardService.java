@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class BoardService {
     private final BoardMapper mapper;
     private final MemberMapper memberMapper;
+    final S3Client s3Client;
 
     public void add(Board board, MultipartFile[] files, Authentication authentication) throws IOException {
         board.setMemberId(Integer.valueOf(authentication.getName()));
@@ -95,9 +97,9 @@ public class BoardService {
     public Board get(Integer id) {
         Board board = mapper.selectById(id);
         List<String> fileNames = mapper.selectFileNameByBoardId(id);
-        // http://172.19.176.1:8888/{id}/{name}
+        // http://172.30.1.57:8888/{id}/{name}
         List<BoardFile> files = fileNames.stream()
-                .map(name -> new BoardFile(name, STR."http://172.19.176.1:8888/\{id}/\{name}"))
+                .map(name -> new BoardFile(name, STR."http://172.30.1.57:8888/\{id}/\{name}"))
                 .toList();
 
         board.setFileList(files);
@@ -131,7 +133,7 @@ public class BoardService {
         if (removeFileList != null && removeFileList.size() > 0) {
             for (String fileName : removeFileList) {
                 // disk의 파일 삭제
-                String path = STR."C:/Temp/prj2/\{board}/\{fileName}";
+                String path = STR."C:/Temp/prj2/\{board.getId()}/\{fileName}";
                 File file = new File(path);
                 file.delete();
                 // db records 삭제
@@ -157,6 +159,8 @@ public class BoardService {
                 file.transferTo(destination);
             }
         }
+
+
         mapper.update(board);
     }
 
