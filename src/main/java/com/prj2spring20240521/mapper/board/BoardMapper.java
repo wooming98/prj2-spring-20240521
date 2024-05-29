@@ -88,6 +88,7 @@ public interface BoardMapper {
             """)
     Integer countAll();
 
+
     @Select("""
             <script>
             SELECT COUNT(b.id)
@@ -134,10 +135,24 @@ public interface BoardMapper {
             """)
     List<Board> selectByMemberId(Integer memberId);
 
+
     @Delete("""
             DELETE FROM board_file
             WHERE board_id=#{boardId}
               AND name=#{fileName}
             """)
     int deleteFileByBoardIdAndName(Integer boardId, String fileName);
+
+    @Delete("""
+            DELETE FROM board_like
+            WHERE board_id=#{boardId}
+              AND member_id=#{memberId}
+            """)
+    int deleteLikeByBoardIdAndMemberId(Integer boardId, Integer memberId);
+
+    @Insert("""
+            INSERT INTO board_like (board_id, member_id)
+            VALUES (#{boardId}, #{memberId})
+            """)
+    int insertLikeByBoardIdAndMemberId(Integer boardId, Integer memberId);
 }
