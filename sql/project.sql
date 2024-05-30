@@ -1,4 +1,4 @@
-USE prj3;
+USE prj2;
 
 # 게시물 테이블 생성
 CREATE TABLE board
@@ -71,48 +71,45 @@ CREATE TABLE authority
 INSERT INTO authority (member_id, name)
 VALUES (19, 'admin');
 
+USE prj2;
+
 # 게시물 여러개 입력
-INSERT INTO board (title, content, member_id)
+INSERT INTO board
+    (title, content, member_id)
 SELECT title, content, member_id
 FROM board;
-
 SELECT COUNT(*)
 FROM board;
-
 SELECT *
 FROM member;
-
 UPDATE member
 SET nick_name = 'abcd'
-WHERE id = 22;
-
+WHERE id = 18;
 UPDATE member
 SET nick_name = 'efgh'
-WHERE id = 23;
+WHERE id = 19;
 
 UPDATE board
-SET member_id = 22
+SET member_id = 18
 WHERE id % 2 = 0;
-
 UPDATE board
-SET member_id = 23
+SET member_id = 19
 WHERE id % 2 = 1;
 
 UPDATE board
 SET title   = 'abc def',
     content = 'ghi jkl'
 WHERE id % 3 = 0;
-
 UPDATE board
 SET title   = 'mno pqr',
     content = 'stu vwx'
 WHERE id % 3 = 1;
-
 UPDATE board
 SET title   = 'yz1 234',
     content = '567 890'
 WHERE id % 3 = 2;
 
+USE prj2;
 DESC board;
 
 CREATE TABLE board_file
@@ -123,9 +120,8 @@ CREATE TABLE board_file
 );
 
 SELECT *
-FROM board_file;
-
-use prj2;
+FROM board_file
+WHERE board_id = 878;
 
 # board_like 만들기
 CREATE TABLE board_like
@@ -134,3 +130,19 @@ CREATE TABLE board_like
     member_id INT NOT NULL REFERENCES member (id),
     PRIMARY KEY (board_id, member_id)
 );
+
+SELECT *
+FROM board_like;
+
+SELECT b.id, COUNT(DISTINCT f.name), COUNT(DISTINCT l.member_id)
+FROM board b
+         JOIN member m ON b.member_id = m.id
+         LEFT JOIN board_file f ON b.id = f.board_id
+         LEFT JOIN board_like l ON b.id = l.board_id
+WHERE b.id = 5;
+
+
+
+
+
+
