@@ -90,7 +90,6 @@ public interface BoardMapper {
             """)
     Integer countAll();
 
-
     @Select("""
             <script>
             SELECT COUNT(b.id)
